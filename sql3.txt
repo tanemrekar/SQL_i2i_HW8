@@ -1,0 +1,75 @@
+example 1
+ 
+create  table emp  as select * from hr.employees;
+select * from emp ;
+alter table emp add (max_salary number);
+ALTER TABLE emp RENAME COLUMN max_salary TO maximum_salary;
+update  emp set maximum_salary = (select max(Salary) from emp);
+DELETE FROM emp WHERE salary = (SELECT MIN(salary) FROM emp);
+
+example 2
+
+create table depart as select * from hr.departments;
+select * from depart;
+
+CREATE INDEX DPR_NAME_IDX ON  depart (DEPARTMENT_NAME);
+
+ALTER TABLE emp
+ADD CONSTRAINT CNSTR_SALARY
+CHECK (SALARY BETWEEN 1000 AND 100000);
+
+drop index   DPR_NAME_IDX  ;
+
+ALTER TABLE emp
+ENABLE CONSTRAINT CNSTR_SALARY;
+
+ALTER TABLE emp
+DISABLE CONSTRAINT CNSTR_SALARY;
+
+ALTER TABLE emp
+DROP CONSTRAINT CNSTR_SALARY;
+
+
+example 3
+
+MERGE INTO emp1 em
+using hr.departments dp
+on (em.department_id = dp.department_id )
+when matched then
+ UPDATE SET em.department_name = dp.department_name
+when not matched then 
+insert ( department_id , department_name )
+values(dp.department_id , 'null');
+
+example 4
+
+SELECT distinct 
+    emp.first_name || ' ' || emp.last_name AS full_name,
+    emp.department_id, 
+    jobs.job_title,
+    MAX(emp.salary) AS max_salary,
+    MIN(emp.salary) AS min_salary,
+    dep.department_name
+FROM 
+    hr.employees emp
+JOIN 
+    hr.jobs jobs ON emp.job_id = jobs.job_id
+JOIN 
+    hr.departments dep ON emp.department_id = dep.department_id
+WHERE 
+    jobs.job_id LIKE 'S%'
+GROUP BY 
+    emp.first_name, 
+    emp.last_name, 
+    emp.department_id, 
+    jobs.job_title,
+    dep.department_name;
+
+
+example 5
+
+Commit is keeping a permanent record of every transaction made in the database
+
+Rollback is the process of restoring a database or program to a previously defined state, typically to recover from an error
+
+
