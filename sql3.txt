@@ -65,11 +65,8 @@ GROUP BY
     jobs.job_title,
     dep.department_name;
 
-
 example 5
 
 Commit is keeping a permanent record of every transaction made in the database
 
 Rollback is the process of restoring a database or program to a previously defined state, typically to recover from an error
-
-
